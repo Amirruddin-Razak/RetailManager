@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using RMWPFUserInterface.Helpers;
+using RMWPFUserInterface.Library.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +78,8 @@ namespace RMWPFUserInterface.ViewModels
             {
                 ErrorMessage = "";
                 var result = await _apiHelper.Authenticate(UserName, Password);
+
+                await _apiHelper.GetLoggedInUserInfo();
             }
             catch (Exception ex)
             {

@@ -6,16 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using System.Configuration;
-using RMWPFUserInterface.Models;
+using RMWPFUserInterface.Library.Models;
 
-namespace RMWPFUserInterface.Helpers
+namespace RMWPFUserInterface.Library.Helpers
 {
     public class APIHelper : IAPIHelper
     {
         private HttpClient apiClient;
+        private ILoggedInUserModel _loggedInUserModel;
 
-        public APIHelper()
+        public APIHelper(ILoggedInUserModel loggedInUserModel)
         {
+            _loggedInUserModel = loggedInUserModel;
             InitializeClient();
         }
 
@@ -41,13 +43,40 @@ namespace RMWPFUserInterface.Helpers
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
+                    _loggedInUserModel.Token = result.Access_Token;
                     return result;
                 }
                 else
                 {
                     throw new Exception(response.ReasonPhrase);
                 }
+            }
+        }
 
+        public async Task GetLoggedInUserInfo() 
+        {
+            apiClient.DefaultRequestHeaders.Clear();
+            apiClient.DefaultRequestHeaders.Accept.Clear();
+
+            apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_loggedInUserModel.Token}");
+            apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            using (HttpResponseMessage response = await apiClient.GetAsync("/api/User"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
+                    _loggedInUserModel.Id = result.Id;
+                    _loggedInUserModel.FirstName = result.FirstName;
+                    _loggedInUserModel.LastName = result.LastName;
+                    _loggedInUserModel.PhoneNumber = result.PhoneNumber;
+                    _loggedInUserModel.EmailAddress = result.EmailAddress;
+                    _loggedInUserModel.DateCreated = result.DateCreated;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
 using RMWPFUserInterface.Helpers;
+using RMWPFUserInterface.Library.Helpers;
+using RMWPFUserInterface.Library.Models;
 using RMWPFUserInterface.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -40,7 +42,8 @@ namespace RMWPFUserInterface
                     viewModel, viewModel.ToString(), viewModel));
 
             _container
-                .Singleton<IAPIHelper, APIHelper>();
+                .Singleton<IAPIHelper, APIHelper>()
+                .Singleton<ILoggedInUserModel, LoggedInUserModel>();
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e)
