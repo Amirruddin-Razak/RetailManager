@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
              xmlns:local="clr-namespace:RMWPFUserInterface.Views" 
              xmlns:viewmodels="clr-namespace:RMWPFUserInterface.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:SalesViewModel}"
-             mc:Ignorable="d" Background="White" FontSize="16"
-             d:DesignHeight="500" d:DesignWidth="800">
+             mc:Ignorable="d" Background="White" FontSize="18"
+             d:DesignHeight="660" d:DesignWidth="980">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -45,9 +46,26 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Product Name" Width="auto"
-                                    DisplayMemberBinding="{Binding ProductName}"/>
-                    <GridViewColumn Header="Available Quantity" Width="auto">
+                    <GridViewColumn Header="Product" Width="auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding ProductName}"/>
+                                    <TextBlock Text="{Binding Description}" FontSize="14"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Unit Price" Width="auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock TextAlignment="Center" 
+                                           Text="{Binding RetailPrice, StringFormat='{}{0:C}',
+                                    ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Stocks" Width="auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock TextAlignment="Center" Text="{Binding AvailableQuantity}"/>

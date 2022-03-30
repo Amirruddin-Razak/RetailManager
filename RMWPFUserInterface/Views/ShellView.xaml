@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RMWPFUserInterface.Views"
         mc:Ignorable="d"
-        Title="ShellView" Height="640" Width="860">
+        Title="ShellView" Height="768" Width="1024">
     <DockPanel>
         <Menu DockPanel.Dock="Top" FontSize="14">
             <MenuItem Header="_File" >
