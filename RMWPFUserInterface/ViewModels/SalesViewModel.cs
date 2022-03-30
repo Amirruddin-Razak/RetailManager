@@ -92,40 +92,19 @@ namespace RMWPFUserInterface.ViewModels
 
         public string Subtotal => CalculateSubtotal().ToString("c");
 
-        private decimal CalculateSubtotal() 
+        private decimal CalculateSubtotal()
         {
-            decimal subtotal = 0;
-
-            foreach (CartItemModel item in Cart)
-            {
-                subtotal += item.Product.RetailPrice * item.QuantityInCart;
-            }
-
-            return subtotal;
+            return Cart.Sum(x => x.Product.RetailPrice * x.QuantityInCart);
         }
 
         public string Tax => CalculateTax().ToString("c");
 
         private decimal CalculateTax()
         {
-            decimal tax = 0;
-
-            foreach (CartItemModel item in Cart)
-            {
-                tax += item.Product.RetailPrice * item.QuantityInCart * (item.Product.TaxPercentage / 100m);
-            }
-
-            return tax;
+            return Cart.Sum(x => x.Product.RetailPrice * x.QuantityInCart * (x.Product.TaxPercentage / 100m));
         }
 
-        public string Total
-        {
-            get
-            {
-                decimal total = CalculateSubtotal() + CalculateTax();
-                return total.ToString("c");
-            }
-        }
+        public string Total => (CalculateSubtotal() + CalculateTax()).ToString("c");
 
         public bool CanAddToCart
         {
