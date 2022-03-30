@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
-using RMWPFUserInterface.Library.Helpers;
+using RMWPFUserInterface.EventModels;
+using RMWPFUserInterface.Library.Api.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace RMWPFUserInterface.ViewModels
         private string _password;
         private string _errorMessage;
         private IAPIHelper _apiHelper;
+        private IEventAggregator _event;
 
-        public LoginViewModel(IAPIHelper apiHelper)
+        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator eventAggregator)
         {
             _apiHelper = apiHelper;
+            _event = eventAggregator;
         }
 
         public string UserName
@@ -55,8 +58,6 @@ namespace RMWPFUserInterface.ViewModels
 
         public bool IsErrorVisible => ErrorMessage?.Length > 0;
 
-
-
         public bool CanLogIn
         {
             get
@@ -80,6 +81,8 @@ namespace RMWPFUserInterface.ViewModels
                 var result = await _apiHelper.Authenticate(UserName, Password);
 
                 await _apiHelper.GetLoggedInUserInfo();
+
+                _event.PublishOnUIThread(new LogOnEvent());
             }
             catch (Exception ex)
             {

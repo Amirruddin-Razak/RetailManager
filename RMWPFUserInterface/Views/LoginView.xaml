@@ -28,11 +28,11 @@
         
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Username :" VerticalAlignment="Center"
                    HorizontalAlignment="Right"/>
-        <TextBox x:Name="UserName" Grid.Row="1" Grid.Column="2" MinWidth="350" Margin="10"/>
+        <TextBox x:Name="UserName" Grid.Row="1" Grid.Column="2" MinWidth="400" Margin="10"/>
 
         <TextBlock Grid.Row="2" Grid.Column="1" Text="Password :" VerticalAlignment="Center"
                    HorizontalAlignment="Right"/>
-        <PasswordBox x:Name="Password" Grid.Row="2" Grid.Column="2" MinWidth="350"  Margin="10"/>
+        <PasswordBox x:Name="Password" Grid.Row="2" Grid.Column="2" MinWidth="400"  Margin="10"/>
 
         <TextBlock x:Name="ErrorMessage" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 
                    MaxWidth="385" TextWrapping="Wrap" Foreground="red" Margin="0, 5"

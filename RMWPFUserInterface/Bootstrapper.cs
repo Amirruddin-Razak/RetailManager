@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using RMWPFUserInterface.Helpers;
-using RMWPFUserInterface.Library.Helpers;
+using RMWPFUserInterface.Library.Api;
+using RMWPFUserInterface.Library.Api.Helpers;
 using RMWPFUserInterface.Library.Models;
 using RMWPFUserInterface.ViewModels;
 using System;
@@ -32,7 +33,9 @@ namespace RMWPFUserInterface
 
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>();
+                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<IAPIHelper, APIHelper>()
+                .Singleton<ILoggedInUserModel, LoggedInUserModel>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)
@@ -42,8 +45,8 @@ namespace RMWPFUserInterface
                     viewModel, viewModel.ToString(), viewModel));
 
             _container
-                .Singleton<IAPIHelper, APIHelper>()
-                .Singleton<ILoggedInUserModel, LoggedInUserModel>();
+                .PerRequest<IProductEndpoint, ProductEndpoint>();
+
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e)

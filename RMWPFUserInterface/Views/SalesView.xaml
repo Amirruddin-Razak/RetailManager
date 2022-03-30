@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:RMWPFUserInterface.Views"
+             xmlns:local="clr-namespace:RMWPFUserInterface.Views" 
+             xmlns:viewmodels="clr-namespace:RMWPFUserInterface.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:SalesViewModel}"
              mc:Ignorable="d" Background="White" FontSize="16"
              d:DesignHeight="500" d:DesignWidth="800">
     <Grid>
@@ -18,27 +19,51 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Column 0 -->
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontSize="28"
+        <!-- Page Title -->
+        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" FontSize="28"
                    Margin="5" HorizontalAlignment="Center" Text="Sales Page"/>
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Products" Margin="5"
-                   HorizontalAlignment="Center" FontSize="18" Grid.ColumnSpan="2"/>
-        <ListBox x:Name="Products" Grid.Row="2" Grid.Column="0" MinHeight="200"
-                 MinWidth="150" Margin="5" Grid.ColumnSpan="2"/>
 
-        <!-- Column 2 -->
-        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Vertical"
-                    Margin="0, 20, 0, 0">
+        
+        <!-- Column 0 -->
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Products" Margin="5"
+                   HorizontalAlignment="Center" FontSize="18"/>
+        
+        <!--#region ProductList -->
+        <ListView ItemsSource="{Binding Products}" Grid.Row="2" Grid.Column="1"
+                  MinHeight="200" Margin="5" Padding="5" SelectedItem="{Binding SelectedProduct}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Product Name" Width="auto"
+                                    DisplayMemberBinding="{Binding ProductName}"/>
+                    <GridViewColumn Header="Available Quantity" Width="auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock TextAlignment="Center" Text="{Binding AvailableQuantity}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <!--#endregion-->
+
+        
+        <!-- Column 1 -->
+        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Vertical" Margin="0 20 0 0">
             <TextBlock Text="Quantity" Margin="5" HorizontalAlignment="Center"/>
-            <TextBox x:Name="ItemQuantity" Margin="10, 5" Padding="5"/>
+            <TextBox x:Name="ItemQuantity" Text="0" Margin="10, 5" Padding="5"/>
             <Button x:Name="AddToCart" Margin="10, 5" Padding="5">
                 Add Item &gt;&gt;
             </Button>
@@ -47,30 +72,52 @@
             </Button>
         </StackPanel>
 
-        <!-- Column 3 -->
+        
+        <!-- Column 2 -->
         <TextBlock Grid.Row="1" Grid.Column="3" Text="Cart" Margin="5"
-                   HorizontalAlignment="Center" FontSize="18" Grid.ColumnSpan="2"/>
-        <ListBox x:Name="Cart" Grid.Row="2" Grid.Column="3" MinHeight="200"
-                 MinWidth="150" Margin="5" Grid.ColumnSpan="2"/>
-
-        <!-- Column 4 -->
-        <StackPanel Grid.Row="3" Grid.Column="4" Orientation="Horizontal"
+                   HorizontalAlignment="Center" FontSize="18"/>
+        
+        <!--#region CartItemList-->
+        <ListView ItemsSource="{Binding Cart}" Grid.Row="2" Grid.Column="3" MinHeight="200"
+                 MinWidth="200" Margin="5" Padding="5" SelectedItem="{Binding SelectedCartItem}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Product Name" Width="auto"
+                                    DisplayMemberBinding="{Binding Product.ProductName}"/>
+                    <GridViewColumn Header="Quantity" Width="auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding QuantityInCart}" TextAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <!--#endregion-->
+        
+        <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal"
                     HorizontalAlignment="Right" Margin="5">
             <TextBlock Text="Subtotal :"/>
             <TextBlock x:Name="Subtotal" Text="$0.00"/>
         </StackPanel>
-        <StackPanel Grid.Row="4" Grid.Column="4" Orientation="Horizontal"
+        <StackPanel Grid.Row="4" Grid.Column="3" Orientation="Horizontal"
                     HorizontalAlignment="Right" Margin="5, 0">
             <TextBlock Text="Tax :"/>
             <TextBlock x:Name="Tax" Text="$0.00"/>
         </StackPanel>
-        <StackPanel Grid.Row="5" Grid.Column="4" Orientation="Horizontal"
+        <StackPanel Grid.Row="5" Grid.Column="3" Orientation="Horizontal"
                     HorizontalAlignment="Right" Margin="5">
             <TextBlock Text="Total :"/>
             <TextBlock x:Name="Total" Text="$0.00"/>
         </StackPanel>
 
-        <Button x:Name="CheckOut" Grid.Row="6" Grid.Column="4" Padding="5" 
+        <Button x:Name="CheckOut" Grid.Row="6" Grid.Column="3" Padding="5" 
                 Margin="5, 20, 5, 0">
             Check Out
         </Button>
