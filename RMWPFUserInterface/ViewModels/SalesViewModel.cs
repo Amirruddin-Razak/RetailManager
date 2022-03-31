@@ -218,8 +218,14 @@ namespace RMWPFUserInterface.ViewModels
 
             await _saleEndpoint.Post(sale);
 
+            await ResetSaleViewModel();
+        }
+
+        private async Task ResetSaleViewModel()
+        {
             Cart.Clear();
             await LoadProduct();
+            RefreshForm();
         }
 
         private void RefreshForm()
