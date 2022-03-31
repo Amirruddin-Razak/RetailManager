@@ -11,17 +11,15 @@ namespace RMWPFUserInterface.ViewModels
     public class ShellViewModel : Conductor<object>, IHandle<LogOnEvent>
     {
         private SalesViewModel _salesVM;
-        private SimpleContainer _container;
         private IEventAggregator _event;
 
-        public ShellViewModel(SimpleContainer container, IEventAggregator eventAggregator, SalesViewModel salesVM)
+        public ShellViewModel(IEventAggregator eventAggregator, SalesViewModel salesVM)
         {
-            _container = container;
             _salesVM = salesVM;
             _event = eventAggregator;
 
             _event.Subscribe(this);
-            ActivateItem(_container.GetInstance<LoginViewModel>());
+            ActivateItem(IoC.Get<LoginViewModel>());
         }
 
         public void Handle(LogOnEvent message)

@@ -38,7 +38,7 @@
         
         <!--#region ProductList -->
         <ListView ItemsSource="{Binding Products}" Grid.Row="2" Grid.Column="1"
-                  MinHeight="200" Margin="5" Padding="5" SelectedItem="{Binding SelectedProduct}">
+                  MinHeight="250" Margin="5" Padding="5" SelectedItem="{Binding SelectedProduct}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -46,7 +46,7 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Product" Width="auto">
+                    <GridViewColumn Header="Product Name" Width="auto">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
@@ -97,7 +97,7 @@
         
         <!--#region CartItemList-->
         <ListView ItemsSource="{Binding Cart}" Grid.Row="2" Grid.Column="3" MinHeight="200"
-                 MinWidth="200" Margin="5" Padding="5" SelectedItem="{Binding SelectedCartItem}">
+                 MinWidth="250" Margin="5" Padding="5" SelectedItem="{Binding SelectedCartItem}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

@@ -174,8 +174,16 @@ namespace RMWPFUserInterface.ViewModels
                 Products.Add(SelectedCartItem.Product);
             }
 
-            SelectedCartItem.Product.ReservedQuantity -= SelectedCartItem.QuantityInCart;
-            Cart.Remove(SelectedCartItem);
+            SelectedCartItem.Product.ReservedQuantity -= 1;
+
+            if (SelectedCartItem.QuantityInCart > 1)
+            {
+                SelectedCartItem.QuantityInCart -= 1;
+            }
+            else
+            {
+                Cart.Remove(SelectedCartItem);
+            }
 
             RefreshForm();
             //Todo Update reserve quantity in database
