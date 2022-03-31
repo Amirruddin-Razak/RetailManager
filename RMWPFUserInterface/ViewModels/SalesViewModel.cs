@@ -18,10 +18,12 @@ namespace RMWPFUserInterface.ViewModels
         private CartItemModel _selectedCartItem;
         private int _itemQuantity;
         IProductEndpoint _productEndpoint;
+        ISaleEndpoint _saleEndpoint;
 
-        public SalesViewModel(IProductEndpoint productEndpoint)
+        public SalesViewModel(IProductEndpoint productEndpoint, ISaleEndpoint saleEndpoint)
         {
             _productEndpoint = productEndpoint;
+            _saleEndpoint = saleEndpoint;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -143,14 +145,9 @@ namespace RMWPFUserInterface.ViewModels
                 Products.Remove(SelectedProduct);
             }
 
-            Cart.ResetBindings();
-            Products.ResetBindings();
-            NotifyOfPropertyChange(() => Subtotal);
-            NotifyOfPropertyChange(() => Tax);
-            NotifyOfPropertyChange(() => Total);
-            NotifyOfPropertyChange(() => CanRemoveFromCart);
-            NotifyOfPropertyChange(() => CanAddToCart);
-            NotifyOfPropertyChange(() => CanCheckOut);
+            RefreshForm();
+
+            //Todo Update reserve quantity in database
         }
 
         public bool CanRemoveFromCart
@@ -180,14 +177,8 @@ namespace RMWPFUserInterface.ViewModels
             SelectedCartItem.Product.ReservedQuantity -= SelectedCartItem.QuantityInCart;
             Cart.Remove(SelectedCartItem);
 
-            Cart.ResetBindings();
-            Products.ResetBindings();
-            NotifyOfPropertyChange(() => Subtotal);
-            NotifyOfPropertyChange(() => Tax);
-            NotifyOfPropertyChange(() => Total);
-            NotifyOfPropertyChange(() => CanRemoveFromCart);
-            NotifyOfPropertyChange(() => CanAddToCart);
-            NotifyOfPropertyChange(() => CanCheckOut);
+            RefreshForm();
+            //Todo Update reserve quantity in database
         }
 
         public bool CanCheckOut
@@ -205,9 +196,34 @@ namespace RMWPFUserInterface.ViewModels
             }
         }
 
-        public void CheckOut()
+        public async Task CheckOut()
         {
-            //Todo handle check out
+            SaleModel sale = new SaleModel();
+            foreach (CartItemModel item in Cart)
+            {
+                sale.SaleItems.Add(new SaleItemModel
+                {
+                    ProductId = item.Product.Id,
+                    Quantity = item.QuantityInCart
+                });
+            }
+
+            await _saleEndpoint.Post(sale);
+
+            Cart.Clear();
+            await LoadProduct();
+        }
+
+        private void RefreshForm()
+        {
+            Cart.ResetBindings();
+            Products.ResetBindings();
+            NotifyOfPropertyChange(() => Subtotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanRemoveFromCart);
+            NotifyOfPropertyChange(() => CanAddToCart);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
     }
 }

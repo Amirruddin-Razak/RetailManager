@@ -14,7 +14,7 @@ namespace RMDataManager.Controllers
     public class ProductController : ApiController
     {
         [HttpGet]
-        public List<ProductModel> GetAll()
+        public List<ProductDBModel> GetAll()
         {
             ProductData data = new ProductData();
 

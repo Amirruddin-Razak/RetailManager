@@ -39,5 +39,20 @@ namespace RMDataManager.Library.DataAccess.Internal
                 connection.Execute(storedProcedure, parameter, commandType: CommandType.StoredProcedure);
             }
         }
+
+        public void SaveData<T>(string storedProcedure, T parameter, string connectionStringName, out int id)
+        {
+            id = 0;
+            string connString = GetConnString(connectionStringName);
+
+            var p = new DynamicParameters(parameter);
+            p.Add("@Id", id, dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            using (IDbConnection connection = new SqlConnection(connString))
+            {
+                connection.Execute(storedProcedure, p, commandType: CommandType.StoredProcedure);
+                id = p.Get<int>("@Id");
+            }
+        }
     }
 }

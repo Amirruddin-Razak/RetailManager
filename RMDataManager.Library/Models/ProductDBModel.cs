@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RMDataManager.Library.Models
 {
-    public class ProductModel
+    public class ProductDBModel
     {
         public int Id { get; set; }
         public string ProductName { get; set; }

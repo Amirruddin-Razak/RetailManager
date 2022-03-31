@@ -11,8 +11,8 @@ namespace RMWPFUserInterface.ViewModels
 {
     public class LoginViewModel : Screen
     {
-        private string _userName;
-        private string _password;
+        private string _userName = "Amirruddinabdulrazak@gmail.com";
+        private string _password = "Pwd.123";
         private string _errorMessage;
         private IAPIHelper _apiHelper;
         private IEventAggregator _event;

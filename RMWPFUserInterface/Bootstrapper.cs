@@ -45,7 +45,8 @@ namespace RMWPFUserInterface
                     viewModel, viewModel.ToString(), viewModel));
 
             _container
-                .PerRequest<IProductEndpoint, ProductEndpoint>();
+                .PerRequest<IProductEndpoint, ProductEndpoint>()
+                .PerRequest<ISaleEndpoint, SaleEndpoint>();
 
         }
 
