@@ -53,9 +53,12 @@
     <Compile Include="Api\Helpers\APIHelper.cs" />
     <Compile Include="Api\Helpers\IAPIHelper.cs" />
     <Compile Include="Models\AuthenticatedUser.cs" />
+    <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="Models\ILoggedInUserModel.cs" />
     <Compile Include="Models\LoggedInUserModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\SaleItemModel.cs" />
+    <Compile Include="Models\SaleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

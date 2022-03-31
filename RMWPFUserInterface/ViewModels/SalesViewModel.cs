@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using RMWPFUserInterface.Library.Api;
 using RMWPFUserInterface.Library.Models;
-using RMWPFUserInterface.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
