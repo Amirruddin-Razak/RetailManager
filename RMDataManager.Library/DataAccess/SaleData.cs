@@ -54,19 +54,19 @@ namespace RMDataManager.Library.DataAccess
                 {
                     sql.StartTransaction("RMData");
 
-                    sql.SaveDataInTransaction("spSale_Insert", sale, out int id);
+                    sql.SaveDataInTransaction("dbo.spSale_Insert", sale, out int id);
                     sale.Id = id;
 
                     foreach (SaleItemDBModel item in saleItems)
                     {
                         item.SaleId = sale.Id;
 
-                        sql.SaveDataInTransaction("spSaleItem_Insert", item);
+                        sql.SaveDataInTransaction("dbo.spSaleItem_Insert", item);
                     }
 
                     foreach (ProductDBModel product in productToUpdate)
                     {
-                        sql.SaveDataInTransaction("spProduct_Update",
+                        sql.SaveDataInTransaction("dbo.spProduct_Update",
                             new { product.Id, product.QuantityInStock, product.ReservedQuantity });
                     }
 
@@ -78,6 +78,14 @@ namespace RMDataManager.Library.DataAccess
                     throw;
                 }
             }
+        }
+
+        public List<SaleReportDBModel> GetSaleReport()
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            List<SaleReportDBModel> output = sql.LoadData<SaleReportDBModel, dynamic>("dbo.spSale_SaleReport", new { }, "RMData");
+
+            return output;
         }
     }
 }
