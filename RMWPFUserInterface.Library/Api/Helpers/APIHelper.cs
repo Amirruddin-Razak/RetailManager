@@ -10,12 +10,12 @@ using RMWPFUserInterface.Library.Models;
 
 namespace RMWPFUserInterface.Library.Api.Helpers
 {
-    public class APIHelper : IAPIHelper
+    public class ApiHelper : IApiHelper
     {
         private HttpClient _apiClient;
         private ILoggedInUserModel _loggedInUserModel;
 
-        public APIHelper(ILoggedInUserModel loggedInUserModel)
+        public ApiHelper(ILoggedInUserModel loggedInUserModel)
         {
             _loggedInUserModel = loggedInUserModel;
             InitializeClient();
@@ -53,6 +53,11 @@ namespace RMWPFUserInterface.Library.Api.Helpers
                     throw new Exception(response.ReasonPhrase);
                 }
             }
+        }
+
+        public void LogOffUser()
+        {
+            _apiClient.DefaultRequestHeaders.Clear();
         }
 
         public async Task GetLoggedInUserInfo() 

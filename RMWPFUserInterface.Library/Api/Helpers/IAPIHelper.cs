@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 
 namespace RMWPFUserInterface.Library.Api.Helpers
 {
-    public interface IAPIHelper
+    public interface IApiHelper
     {
         HttpClient ApiClient { get; }
         Task<AuthenticatedUser> Authenticate(string username, string password);
+        void LogOffUser();
         Task GetLoggedInUserInfo();
     }
 }

@@ -11,9 +11,9 @@ namespace RMWPFUserInterface.Library.Api
 {
     public class SaleEndpoint : ISaleEndpoint
     {
-        IAPIHelper _apiHelper;
+        IApiHelper _apiHelper;
 
-        public SaleEndpoint(IAPIHelper apiHelper)
+        public SaleEndpoint(IApiHelper apiHelper)
         {
             _apiHelper = apiHelper;
         }

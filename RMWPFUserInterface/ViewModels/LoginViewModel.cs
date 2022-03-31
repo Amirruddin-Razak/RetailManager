@@ -14,10 +14,10 @@ namespace RMWPFUserInterface.ViewModels
         private string _userName = "Amirruddinabdulrazak@gmail.com";
         private string _password = "Pwd.123";
         private string _errorMessage;
-        private IAPIHelper _apiHelper;
+        private IApiHelper _apiHelper;
         private IEventAggregator _event;
 
-        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator eventAggregator)
+        public LoginViewModel(IApiHelper apiHelper, IEventAggregator eventAggregator)
         {
             _apiHelper = apiHelper;
             _event = eventAggregator;
