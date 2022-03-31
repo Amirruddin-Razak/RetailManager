@@ -48,21 +48,35 @@ namespace RMDataManager.Library.DataAccess
 
             sale.Total = sale.Subtotal + sale.Tax;
 
-            SqlDataAccess sql = new SqlDataAccess();
-
-            sql.SaveData("spSale_Insert", sale, "RMData", out int id);
-            sale.Id = id;
-
-            foreach (SaleItemDBModel item in saleItems)
+            using (SqlDataAccess sql = new SqlDataAccess())
             {
-                item.SaleId = sale.Id;
+                try
+                {
+                    sql.StartTransaction("RMData");
 
-                sql.SaveData("spSaleItem_Insert", item, "RMData");
-            }
+                    sql.SaveDataInTransaction("spSale_Insert", sale, out int id);
+                    sale.Id = id;
 
-            foreach (ProductDBModel product in productToUpdate)
-            {
-                sql.SaveData("spProduct_Update", new { product.Id, product.QuantityInStock, product.ReservedQuantity }, "RMData");
+                    foreach (SaleItemDBModel item in saleItems)
+                    {
+                        item.SaleId = sale.Id;
+
+                        sql.SaveDataInTransaction("spSaleItem_Insert", item);
+                    }
+
+                    foreach (ProductDBModel product in productToUpdate)
+                    {
+                        sql.SaveDataInTransaction("spProduct_Update",
+                            new { product.Id, product.QuantityInStock, product.ReservedQuantity });
+                    }
+
+                    sql.CommitTransaction();
+                }
+                catch (Exception)
+                {
+                    sql.RollBackTransaction();
+                    throw;
+                }
             }
         }
     }
