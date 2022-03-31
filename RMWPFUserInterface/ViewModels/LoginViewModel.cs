@@ -87,6 +87,7 @@ namespace RMWPFUserInterface.ViewModels
             catch (Exception ex)
             {
                 ErrorMessage = ex.Message;
+                NotifyOfPropertyChange(() => IsErrorVisible);
             }
         }
     }

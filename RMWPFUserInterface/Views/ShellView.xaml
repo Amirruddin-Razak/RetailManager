@@ -3,16 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:RMWPFUserInterface.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ShellViewModel}"
         xmlns:local="clr-namespace:RMWPFUserInterface.Views"
         mc:Ignorable="d"
         Title="ShellView" Height="768" Width="1024">
     <DockPanel>
         <Menu DockPanel.Dock="Top" FontSize="14">
             <MenuItem Header="_File" >
-
+                <MenuItem x:Name="ExitApplication" Header="E_xit"/>
             </MenuItem>
-            <MenuItem Header="Account">
-                <MenuItem x:Name="LoginScreen" Header="_Login"/>
+            <MenuItem Header="Account" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                <MenuItem x:Name="LogOut" Header="_Log Out"/>
             </MenuItem>
         </Menu>
         <Grid>

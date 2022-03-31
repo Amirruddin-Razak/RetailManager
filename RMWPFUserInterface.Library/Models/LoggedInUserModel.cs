@@ -15,5 +15,16 @@ namespace RMWPFUserInterface.Library.Models
         public string PhoneNumber { get; set; }
         public string EmailAddress { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public void LogOut()
+        {
+            Token = "";
+            Id = "";
+            FirstName = "";
+            LastName = "";
+            PhoneNumber = "";
+            EmailAddress = "";
+            DateCreated = DateTime.MinValue;
+        }
     }
 }

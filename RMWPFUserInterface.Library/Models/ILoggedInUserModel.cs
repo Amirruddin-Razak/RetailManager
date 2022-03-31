@@ -11,5 +11,7 @@ namespace RMWPFUserInterface.Library.Models
         string LastName { get; set; }
         string PhoneNumber { get; set; }
         string Token { get; set; }
+
+        void LogOut();
     }
 }
