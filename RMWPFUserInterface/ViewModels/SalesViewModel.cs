@@ -4,9 +4,11 @@ using RMWPFUserInterface.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace RMWPFUserInterface.ViewModels
 {
@@ -19,17 +21,44 @@ namespace RMWPFUserInterface.ViewModels
         private int _itemQuantity;
         IProductEndpoint _productEndpoint;
         ISaleEndpoint _saleEndpoint;
+        private StatusInfoViewModel _statusInfoVM;
+        private IWindowManager _windowManager;
 
-        public SalesViewModel(IProductEndpoint productEndpoint, ISaleEndpoint saleEndpoint)
+        public SalesViewModel(IProductEndpoint productEndpoint, ISaleEndpoint saleEndpoint, StatusInfoViewModel statusInfoVM, IWindowManager windowManager)
         {
             _productEndpoint = productEndpoint;
             _saleEndpoint = saleEndpoint;
+            _statusInfoVM = statusInfoVM;
+            _windowManager = windowManager;
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await LoadProduct();
+            try
+            {
+                await LoadProduct();
+            }
+            catch (Exception ex)
+            {
+                dynamic settings = new ExpandoObject();
+                settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                settings.ResizeMode = ResizeMode.NoResize;
+                settings.Title = "System Error";
+
+                if (ex.Message == "Unauthorized")
+                {
+                    _statusInfoVM.UpdateMessage("Not Authorized", "You do not have permission to access sale fom");
+                    _windowManager.ShowDialog(_statusInfoVM, null, settings);
+                }
+                else
+                {
+                    _statusInfoVM.UpdateMessage("Fatal Error", ex.Message);
+                    _windowManager.ShowDialog(_statusInfoVM, null, settings);
+                }
+
+                TryClose();
+            }
         }
 
         private async Task LoadProduct()
