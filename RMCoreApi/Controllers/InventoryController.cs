@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using RMDataManager.Library.DataAccess;
 using RMDataManager.Library.Models;
 using System;
@@ -15,11 +16,18 @@ namespace RMCoreApi.Controllers
     [Authorize]
     public class InventoryController : ControllerBase
     {
+        private readonly IConfiguration _config;
+
+        public InventoryController(IConfiguration config)
+        {
+            _config = config;
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public void Post(InventoryDBModel inventory)
         {
-            InventoryData data = new InventoryData();
+            InventoryData data = new InventoryData(_config);
             data.SaveInventory(inventory);
         }
 
@@ -27,7 +35,7 @@ namespace RMCoreApi.Controllers
         [HttpGet]
         public List<InventoryDBModel> Get()
         {
-            InventoryData data = new InventoryData();
+            InventoryData data = new InventoryData(_config);
             return data.GetInventories();
         }
     }
