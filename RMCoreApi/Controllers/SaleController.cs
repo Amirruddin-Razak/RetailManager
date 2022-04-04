@@ -17,19 +17,18 @@ namespace RMCoreApi.Controllers
     [Authorize]
     public class SaleController : ControllerBase
     {
-        private readonly IConfiguration _config;
+        private readonly ISaleData _data;
 
-        public SaleController(IConfiguration config)
+        public SaleController(IConfiguration config, ISaleData data)
         {
-            _config = config;
+            _data = data;
         }
 
         [HttpPost]
         [Authorize(Roles = "Cashier")]
         public void Post(SaleModel sale)
         {
-            SaleData data = new SaleData(_config);
-            data.SaveSale(sale, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            _data.SaveSale(sale, User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
 
         [HttpGet]
@@ -37,8 +36,7 @@ namespace RMCoreApi.Controllers
         [Route("GetSalesReport")]
         public List<SaleReportDBModel> GetSalesReport()
         {
-            SaleData data = new SaleData(_config);
-            return data.GetSaleReport();
+            return _data.GetSaleReport();
         }
     }
 }

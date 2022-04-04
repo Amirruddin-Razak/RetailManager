@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RMDataManager.Library.DataAccess.Internal
 {
-    internal class SqlDataAccess : IDisposable
+    public class SqlDataAccess : IDisposable, ISqlDataAccess
     {
         public SqlDataAccess(IConfiguration config)
         {
@@ -23,7 +23,7 @@ namespace RMDataManager.Library.DataAccess.Internal
             return _config.GetConnectionString(name);
         }
 
-        public List<T> LoadData<T, U>(string storedProcedure, U parameter, string connectionStringName) 
+        public List<T> LoadData<T, U>(string storedProcedure, U parameter, string connectionStringName)
         {
             List<T> rows;
             string connString = GetConnString(connectionStringName);
@@ -112,7 +112,7 @@ namespace RMDataManager.Library.DataAccess.Internal
 
         public void Dispose()
         {
-            _connection.Close();
+            _connection?.Close();
         }
     }
 }

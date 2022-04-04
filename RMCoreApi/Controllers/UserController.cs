@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RMCoreApi.Data;
 using RMCoreApi.Models;
 using RMDataManager.Library.DataAccess;
@@ -23,22 +24,24 @@ namespace RMCoreApi.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IConfiguration _config;
+        private readonly IUserData _data;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IConfiguration config)
+        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IUserData data,
+            ILogger<UserController> logger)
         {
             _context = context;
             _userManager = userManager;
-            _config = config;
+            _data = data;
+            _logger = logger;
         }
 
         [HttpGet]
         public UserDBModel GetById()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserData data = new UserData(_config);
 
-            return data.GetUserById(userId);
+            return _data.GetUserById(userId);
         }
 
         [HttpGet]
@@ -84,7 +87,10 @@ namespace RMCoreApi.Controllers
         [Route("Admin/AddRole")]
         public async Task AddARole(UserRolePairModel pairModel)
         {
+            string adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(pairModel.UserId);
+
+            _logger.LogInformation("Admin {adminId} add user {userId} to role {role}", adminId, user.Id, pairModel.Role);
             await _userManager.AddToRoleAsync(user, pairModel.Role);
         }
 
@@ -93,7 +99,10 @@ namespace RMCoreApi.Controllers
         [Route("Admin/RemoveRole")]
         public async Task RemoveARole(UserRolePairModel pairModel)
         {
+            string adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(pairModel.UserId);
+
+            _logger.LogInformation("Admin {adminId} remove user {userId} from role {role}", adminId, user.Id, pairModel.Role);
             await _userManager.RemoveFromRoleAsync(user, pairModel.Role);
         }
     }

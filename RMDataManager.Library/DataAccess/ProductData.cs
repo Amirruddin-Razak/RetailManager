@@ -9,29 +9,25 @@ using System.Threading.Tasks;
 
 namespace RMDataManager.Library.DataAccess
 {
-    public class ProductData
+    public class ProductData : IProductData
     {
-        private readonly IConfiguration _config;
+        private readonly ISqlDataAccess _sql;
 
-        public ProductData(IConfiguration config)
+        public ProductData(ISqlDataAccess sql)
         {
-            _config = config;
+            _sql = sql;
         }
 
         public List<ProductDBModel> GetProducts()
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
-            
-            List<ProductDBModel> result = sql.LoadData<ProductDBModel, dynamic>("dbo.spProduct_GetAll", new { }, "RMData");
+            List<ProductDBModel> result = _sql.LoadData<ProductDBModel, dynamic>("dbo.spProduct_GetAll", new { }, "RMData");
 
             return result;
         }
 
-        public ProductDBModel GetProductById(int id)
+        public ProductDBModel GetProductById(int Id)
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
-
-            ProductDBModel result = sql.LoadData<ProductDBModel, dynamic>("dbo.spProduct_GetById", new { Id = id }, "RMData").First();
+            ProductDBModel result = _sql.LoadData<ProductDBModel, dynamic>("dbo.spProduct_GetById", new { Id }, "RMData").First();
 
             return result;
         }

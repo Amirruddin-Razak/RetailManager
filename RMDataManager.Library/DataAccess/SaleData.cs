@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RMDataManager.Library.DataAccess.Internal;
 using RMDataManager.Library.Models;
 using System;
@@ -9,20 +10,23 @@ using System.Threading.Tasks;
 
 namespace RMDataManager.Library.DataAccess
 {
-    public class SaleData
+    public class SaleData : ISaleData
     {
-        private readonly IConfiguration _config;
+        private readonly IProductData _data;
+        private readonly ISqlDataAccess _sql;
+        private readonly ILogger _logger;
 
-        public SaleData(IConfiguration config)
+        public SaleData(IProductData data, ISqlDataAccess sql, ILogger<SaleData> logger)
         {
-            _config = config;
+            _data = data;
+            _sql = sql;
+            _logger = logger;
         }
 
         public void SaveSale(SaleModel saleInfo, string cashierId)
         {
             List<SaleItemDBModel> saleItems = new List<SaleItemDBModel>();
             List<ProductDBModel> productToUpdate = new List<ProductDBModel>();
-            ProductData data = new ProductData(_config);
 
             foreach (SaleItemModel si in saleInfo.SaleItems)
             {
@@ -32,7 +36,7 @@ namespace RMDataManager.Library.DataAccess
                     Quantity = si.Quantity
                 };
 
-                ProductDBModel productInfo = data.GetProductById(item.ProductId);
+                ProductDBModel productInfo = _data.GetProductById(item.ProductId);
                 productInfo.QuantityInStock -= item.Quantity;
                 productToUpdate.Add(productInfo);
 
@@ -56,42 +60,39 @@ namespace RMDataManager.Library.DataAccess
 
             sale.Total = sale.Subtotal + sale.Tax;
 
-            using (SqlDataAccess sql = new SqlDataAccess(_config))
+            try
             {
-                try
+                _sql.StartTransaction("RMData");
+
+                _sql.SaveDataInTransaction("dbo.spSale_Insert", sale, out int id);
+                sale.Id = id;
+
+                foreach (SaleItemDBModel item in saleItems)
                 {
-                    sql.StartTransaction("RMData");
+                    item.SaleId = sale.Id;
 
-                    sql.SaveDataInTransaction("dbo.spSale_Insert", sale, out int id);
-                    sale.Id = id;
-
-                    foreach (SaleItemDBModel item in saleItems)
-                    {
-                        item.SaleId = sale.Id;
-
-                        sql.SaveDataInTransaction("dbo.spSaleItem_Insert", item);
-                    }
-
-                    foreach (ProductDBModel product in productToUpdate)
-                    {
-                        sql.SaveDataInTransaction("dbo.spProduct_Update",
-                            new { product.Id, product.QuantityInStock, product.ReservedQuantity });
-                    }
-
-                    sql.CommitTransaction();
+                    _sql.SaveDataInTransaction("dbo.spSaleItem_Insert", item);
                 }
-                catch (Exception)
+
+                foreach (ProductDBModel product in productToUpdate)
                 {
-                    sql.RollBackTransaction();
-                    throw;
+                    _sql.SaveDataInTransaction("dbo.spProduct_Update",
+                        new { product.Id, product.QuantityInStock, product.ReservedQuantity });
                 }
+
+                _sql.CommitTransaction();
+            }
+            catch (Exception ex)
+            {
+                _sql.RollBackTransaction();
+                _logger.LogError(ex, "Check out transaction fail when accessing SQL. Changes are rolled back");
+                throw;
             }
         }
 
         public List<SaleReportDBModel> GetSaleReport()
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
-            List<SaleReportDBModel> output = sql.LoadData<SaleReportDBModel, dynamic>("dbo.spSale_SaleReport", new { }, "RMData");
+            List<SaleReportDBModel> output = _sql.LoadData<SaleReportDBModel, dynamic>("dbo.spSale_SaleReport", new { }, "RMData");
 
             return output;
         }
