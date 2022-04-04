@@ -49,15 +49,15 @@ namespace RMWPFUserInterface.ViewModels
                 if (ex.Message == "Unauthorized")
                 {
                     _statusInfoVM.UpdateMessage("Not Authorized", "You do not have permission to access sale fom");
-                    _windowManager.ShowDialog(_statusInfoVM, null, settings);
+                    await _windowManager.ShowDialogAsync(_statusInfoVM, null, settings);
                 }
                 else
                 {
                     _statusInfoVM.UpdateMessage("Fatal Error", ex.Message);
-                    _windowManager.ShowDialog(_statusInfoVM, null, settings);
+                    await _windowManager.ShowDialogAsync(_statusInfoVM, null, settings);
                 }
 
-                TryClose();
+                TryCloseAsync();
             }
         }
 

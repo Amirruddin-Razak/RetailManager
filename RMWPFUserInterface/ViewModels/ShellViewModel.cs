@@ -6,26 +6,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RMWPFUserInterface.ViewModels
 {
     public class ShellViewModel : Conductor<object>, IHandle<LogOnEvent>
     {
-        private SalesViewModel _salesVM;
         private IEventAggregator _event;
         ILoggedInUserModel _user;
         IApiHelper _apiHelper;
 
-        public ShellViewModel(IEventAggregator eventAggregator, SalesViewModel salesVM, ILoggedInUserModel user, IApiHelper apiHelper)
+        public ShellViewModel(IEventAggregator eventAggregator, ILoggedInUserModel user, IApiHelper apiHelper)
         {
-            _salesVM = salesVM;
             _event = eventAggregator;
             _user = user;
             _apiHelper = apiHelper;
 
-            _event.Subscribe(this);
-            ActivateItem(IoC.Get<LoginViewModel>());
+            _event.SubscribeOnPublishedThread(this);
+
+            ActivateItemAsync(IoC.Get<LoginViewModel>());
         }
 
         public bool IsLoggedIn
@@ -43,27 +43,27 @@ namespace RMWPFUserInterface.ViewModels
             }
         }
 
-        public void Handle(LogOnEvent message)
+        public async Task UserManagement()
         {
-            ActivateItem(_salesVM);
-            NotifyOfPropertyChange(() => IsLoggedIn);
-        }
-
-        public void UserManagement()
-        {
-            ActivateItem(IoC.Get<UserDisplayViewModel>());
+            await ActivateItemAsync(IoC.Get<UserDisplayViewModel>());
         }
 
         public void ExitApplication()
         {
-            TryClose();
+            TryCloseAsync();
         }
 
-        public void LogOut()
+        public async Task LogOut()
         {
             _user.LogOut();
             _apiHelper.LogOffUser();
-            ActivateItem(IoC.Get<LoginViewModel>());
+            await ActivateItemAsync(IoC.Get<LoginViewModel>());
+            NotifyOfPropertyChange(() => IsLoggedIn);
+        }
+
+        public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
+        {
+            await ActivateItemAsync(IoC.Get<SalesViewModel>(), cancellationToken);
             NotifyOfPropertyChange(() => IsLoggedIn);
         }
     }

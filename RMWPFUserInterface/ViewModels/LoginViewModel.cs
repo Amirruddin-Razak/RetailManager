@@ -82,7 +82,7 @@ namespace RMWPFUserInterface.ViewModels
 
                 await _apiHelper.GetLoggedInUserInfo();
 
-                _event.PublishOnUIThread(new LogOnEvent());
+                await _event.PublishOnUIThreadAsync(new LogOnEvent());
             }
             catch (Exception ex)
             {

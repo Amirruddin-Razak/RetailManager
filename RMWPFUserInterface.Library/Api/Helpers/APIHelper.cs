@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
-using System.Configuration;
 using RMWPFUserInterface.Library.Models;
+using System.Configuration;
 
 namespace RMWPFUserInterface.Library.Api.Helpers
 {
