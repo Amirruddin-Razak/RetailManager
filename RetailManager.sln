@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMDataManager", "RMDataManager\RMDataManager.csproj", "{D441A145-D372-461B-9182-2A87B49AE4D6}"
-EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RMData", "RMData\RMData.sqlproj", "{B4AEAD19-0FFE-40F6-8E4A-F9A0E206ED6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMWPFUserInterface", "RMWPFUserInterface\RMWPFUserInterface.csproj", "{996395C4-7B4A-49A9-A616-8BBD5F2AD5F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RMWPFUserInterface", "RMWPFUserInterface\RMWPFUserInterface.csproj", "{996395C4-7B4A-49A9-A616-8BBD5F2AD5F4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RMDataManager.Library", "RMDataManager.Library\RMDataManager.Library.csproj", "{8F36BD2D-7634-402C-88CF-9CF4063ECDA9}"
 EndProject
@@ -19,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{64C14E6A-B7A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{F23FD63B-BEE8-4DCB-BD52-4339AA389281}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMCoreApi", "RMCoreApi\RMCoreApi.csproj", "{4BAFF8A9-AF74-4924-8595-90944075C8D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RMCoreApi", "RMCoreApi\RMCoreApi.csproj", "{4BAFF8A9-AF74-4924-8595-90944075C8D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D441A145-D372-461B-9182-2A87B49AE4D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D441A145-D372-461B-9182-2A87B49AE4D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D441A145-D372-461B-9182-2A87B49AE4D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D441A145-D372-461B-9182-2A87B49AE4D6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4AEAD19-0FFE-40F6-8E4A-F9A0E206ED6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B4AEAD19-0FFE-40F6-8E4A-F9A0E206ED6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4AEAD19-0FFE-40F6-8E4A-F9A0E206ED6A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -58,7 +52,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{D441A145-D372-461B-9182-2A87B49AE4D6} = {64C14E6A-B7A3-4514-942A-9919BF65EEB7}
 		{B4AEAD19-0FFE-40F6-8E4A-F9A0E206ED6A} = {25E75F39-BD70-43A5-A906-6AC9BC917517}
 		{996395C4-7B4A-49A9-A616-8BBD5F2AD5F4} = {F23FD63B-BEE8-4DCB-BD52-4339AA389281}
 		{8F36BD2D-7634-402C-88CF-9CF4063ECDA9} = {64C14E6A-B7A3-4514-942A-9919BF65EEB7}

@@ -13,14 +13,12 @@ namespace RMWPFUserInterface.ViewModels
 {
     public class ShellViewModel : Conductor<object>, IHandle<LogOnEvent>
     {
-        private SalesViewModel _salesVM;
         private IEventAggregator _event;
         ILoggedInUserModel _user;
         IApiHelper _apiHelper;
 
-        public ShellViewModel(IEventAggregator eventAggregator, SalesViewModel salesVM, ILoggedInUserModel user, IApiHelper apiHelper)
+        public ShellViewModel(IEventAggregator eventAggregator, ILoggedInUserModel user, IApiHelper apiHelper)
         {
-            _salesVM = salesVM;
             _event = eventAggregator;
             _user = user;
             _apiHelper = apiHelper;
@@ -65,7 +63,7 @@ namespace RMWPFUserInterface.ViewModels
 
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
-            await ActivateItemAsync(_salesVM, cancellationToken);
+            await ActivateItemAsync(IoC.Get<SalesViewModel>(), cancellationToken);
             NotifyOfPropertyChange(() => IsLoggedIn);
         }
     }
