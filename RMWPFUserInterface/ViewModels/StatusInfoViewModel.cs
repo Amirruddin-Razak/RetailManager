@@ -23,7 +23,7 @@ namespace RMWPFUserInterface.ViewModels
 
         public void Close()
         {
-            TryClose();
+            TryCloseAsync();
         }
     }
 }
